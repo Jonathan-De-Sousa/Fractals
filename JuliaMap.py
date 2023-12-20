@@ -2,44 +2,28 @@
 Julia map
 Written by Jonathan De Sousa
 Date: 16-12-2023
+
+f(z) -> z^2 + c
 '''
 
-import numpy as np
 import matplotlib.pyplot as plt
+from methods import *
 
-# Julia set 1: c = -0.101 + 0.956i
+count_threshold     = 2.75*(10**1);
+modulus_threshold   = 10**9;
+complex_constant    = -0.101 + 0.956j
 
-# Discretise Re and Im parts of complex plane
-Re = np.linspace(start=-3, stop=3, num=501)
-Im = np.linspace(start=-3, stop=3, num=501)
+meshgrid = generate_complex_meshgrid(real_range=[-3,3], 
+                            imaginary_range=[-3,3],
+                            real_count=501,
+                            imaginary_count=501)
 
-# Mesh complex plane
-X, Y = np.meshgrid(Re,Im)
-Z = X + 1j*Y
+count_matrix = generate_iteration_map(count_threshold,
+                                      modulus_threshold,
+                                      complex_constant,
+                                      meshgrid)
 
-# Set parameters
-max_iter   = 2.75*(10**1); #max interations - used as convergence criteria
-max_mod    = 10**6; #max modulus of z - used as divergence criteria
-julia_iter = np.ones(np.shape(Z))*max_iter
-c          = -0.101 + 0.956j
-
-for u in range(np.shape(X)[0]):
-    for v in range(np.shape(Y)[1]):
-        
-        Z_0 = Z[u][v]; #set as constant so that no need to constantly call C(u,v)
-        count = 0
-        
-        while count < max_iter:
-            z_n = Z_0**2 + c
-            if abs(z_n) > max_mod:
-                julia_iter[u][v] = count
-                break
-            
-            Z_0 = z_n
-            count = count + 1
-
-# Plot Julia set
-plt.contourf(np.real(Z), np.imag(Z), julia_iter, levels=100, cmap='seismic');
-plt.set_cmap('seismic')
-plt.gca().set_aspect('equal')
-plt.show()
+plot_filled_contour_map(meshgrid,
+                        count_matrix,
+                        countour_levels=100,
+                        color_map='seismic')
