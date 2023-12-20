@@ -39,12 +39,7 @@ for u in range(np.shape(X)[0]):
             count = count + 1
 
 # Plot Julia set
-plt.contourf(np.real(Z), np.imag(Z), julia_iter, 100);
-# [~,h1] = contourf(real(Z),imag(Z),julia_iter,100);
-# set(h1,'LineColor','none')
-# colormap(flipud(ColorMap))
-plt.xlabel('Re(z)')
-plt.ylabel('Im(z)')
-# plt.title(sprintf('Julia Map, c = %.3f + %.3fi',real(c),imag(c)),'FontSize',15)
+plt.contourf(np.real(Z), np.imag(Z), julia_iter, levels=100, cmap='seismic');
+plt.set_cmap('seismic')
 plt.gca().set_aspect('equal')
 plt.show()
